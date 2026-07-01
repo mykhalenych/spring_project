@@ -15,6 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,16 +42,17 @@ class BookServiceImplTest {
                 new String[]{"Isbn"}
         );
         Specification<Book> specification = (root, query, criteriaBuilder) -> null;
+        Pageable pageable = PageRequest.of(0, 10);
         Book book = new Book();
         book.setId(1L);
         BookDto bookDto = new BookDto();
         bookDto.setId(1L);
 
         when(bookSpecificationBuilder.build(searchParams)).thenReturn(specification);
-        when(bookRepository.findAll(specification)).thenReturn(List.of(book));
+        when(bookRepository.findAll(specification, pageable)).thenReturn(new PageImpl<>(List.of(book)));
         when(bookMapper.toDto(book)).thenReturn(bookDto);
 
-        List<BookDto> actual = bookService.search(searchParams);
+        List<BookDto> actual = bookService.search(searchParams, pageable);
 
         assertEquals(1, actual.size());
         assertEquals(1L, actual.get(0).getId());
