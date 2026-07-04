@@ -19,7 +19,8 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto register(UserRegistrationRequestDto request)
             throws RegistrationException {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RegistrationException("Unable to complete registration");
+            throw new RegistrationException("Can't register user. Email "
+                    + request.getEmail() + " is already registered.");
         }
         User user = userMapper.toModel(request);
         User savedUser = userRepository.save(user);
