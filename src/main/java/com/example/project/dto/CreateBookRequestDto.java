@@ -31,4 +31,6 @@ public class CreateBookRequestDto {
 
     @Size(max = 255)
     private String coverImage;
+
+    private java.util.List<Long> categoryIds;
 }

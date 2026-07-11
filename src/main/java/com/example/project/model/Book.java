@@ -41,5 +41,13 @@ public class Book {
 
     @Column(nullable = false)
     private boolean isDeleted = false;
+
+    @jakarta.persistence.ManyToMany(fetch = jakarta.persistence.FetchType.LAZY)
+    @jakarta.persistence.JoinTable(
+            name = "books_categories",
+            joinColumns = @jakarta.persistence.JoinColumn(name = "book_id"),
+            inverseJoinColumns = @jakarta.persistence.JoinColumn(name = "category_id")
+    )
+    private java.util.Set<Category> categories = new java.util.HashSet<>();
 }
 
